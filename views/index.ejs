@@ -1,0 +1,22 @@
+<!-- views/index.ejs -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio</title>
+</head>
+<body>
+  <h1>Bienvenido al Sistema <%= nombreUsuario %></h1>
+  
+  <button onclick="window.location='/datos'">Ver Datos</button>
+  <button onclick="window.location='/usuarios/nuevo'">Crear Nuevo Usuario</button>
+  <button onclick="window.location='/usuarios'">Ver usuarios</button>
+  <button onclick="window.location='/impresion_nueva'">Impresion</button>
+
+  <form action="/logout" method="get">
+    <button type="submit">Cerrar Sesión</button>
+  </form>
+  
+</body>
+</html>

@@ -1,0 +1,62 @@
+
+<!-- views/index.ejs -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visualización de Datos</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <h1>Información de usuarios</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Area</th>
+        <th>Empresa</th>
+        <th>Usuario</th>
+        <th>Password</th>
+        <th>Tipo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% datos.forEach((fila) => { %>
+        <tr>
+          <td><%= fila.nombre %></td>
+          <td><%= fila.area %></td>
+          <td><%= fila.empresa %></td>
+          <td><%= fila.usuario %></td>
+          <td><%= fila.password %></td>
+          <td><%= fila.tipo_usuario %></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+
+  <button onclick="window.location='/main';">Regresar al Inicio</button>
+
+  <form action="/logout" method="get">
+    <button type="submit">Cerrar Sesión</button>
+  </form>
+
+  
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Impresión</title>
+</head>
+<body>
+    <h1>Bienvenid@ <%= nombreUsuario %> </h1>
+    <h1>Formulario de Impresión</h1>
+    <form id="impresionForm" action="/impresion" method="post" enctype="multipart/form-data">
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha" required><br>
+
+        <!-- <label for="nombre">Nombre del Solicitante:</label>
+        <input type="text" id="nombre" name="nombre" required><br> -->
+
+        <label for="numImpresiones">Número de Impresiones:</label>
+        <input type="number" id="numImpresiones" name="numImpresiones" required><br>
+        <label for="proyecto">Proyecto o Asunto de Impresión:</label>
+        <input type="text" id="proyecto" name="proyecto" required><br>
+        <label for="area">Area</label><br>
+        <select id="area" name="area" required>
+            <option value="Administracion">Administracion</option>
+            <option value="Almacen">Almacen</option>
+            <option value="Biomedica">Biomedica</option>
+            <option value="Calidad">Calidad</option>
+            <option value="Compras">Compras</option>
+            <option value="Design">Design</option>
+            <option value="Electronica">Electronica</option>
+            <option value="Infraestructura">Infraestructura</option>
+            <option value="Ventas">Ventas</option>
+        </select><br>
+        <label for="color">Color o Blanco y Negro:</label>
+        <select id="color" name="color" required>
+            <option value="color">Color</option>
+            <option value="blancoNegro">Blanco y Negro</option>
+        </select><br>
+        <label for="observaciones">Observaciones:</label>
+        <textarea id="observaciones" name="observaciones"></textarea><br>
+        <label for="archivo">Archivo:</label>
+        <input type="file" id="archivo" name="archivo" accept=".pdf, .doc, .docx" required><br>
+        <button type="submit">Guardar</button>
+    </form>
+    
+    <% if (tipoUsuario === 'admin') { %>
+        <button onclick="window.location='/main';">Vista Main</button>
+    <% } else if (tipoUsuario === 'printer') { %>
+        <button onclick="window.location='/status';">Estado de mis impresiones</button>
+    <% } %>
+
+    <!-- Falta agregar boton para vista preliminar de las impresiones  -->
+    
+
+    <form action="/logout" method="get">
+        <button type="submit">Cerrar Sesión</button>
+      </form>
+    
+</body>
+</html>

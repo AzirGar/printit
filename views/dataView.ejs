@@ -1,0 +1,68 @@
+<!-- views/index.ejs -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visualización de Datos</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <h1>Información de la Base de Datos</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Area</th>
+        <th>Número de Impresiones</th>
+        <th>Proyecto</th>
+        <th>Color</th>
+        <th>Observaciones</th>
+        <th>Nombre de Archivo</th>
+        <th>Estado</th>
+        <th>Imprimir</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% datos.forEach((fila) => { %>
+        <tr>
+          <td><%= fila.id %></td>
+          <td><%= fila.nombre %></td>
+          <td><%= fila.area %></td>
+          <td><%= fila.numImpresiones %></td>
+          <td><%= fila.proyecto %></td>
+          <td><%= fila.color %></td>
+          <td><%= fila.observaciones %></td>
+          <td><%= fila.nombreArchivo %></td>
+          <td><%= fila.estado %></td>
+          <td>
+            <form action="/imprimirdoc" method="post">
+              <input type="hidden" name="nombreArchivo" value="<%= fila.nombreArchivo %>">
+              <button type="submit">Imprimir</button>
+            </form>
+          </td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+
+  <button onclick="window.location='/main';">Regresar al Inicio</button>
+</body>
+</html>

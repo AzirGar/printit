@@ -1,0 +1,41 @@
+<!-- views/createUser.ejs -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear Nuevo Usuario</title>
+</head>
+<body>
+  <h1>Crear Nuevo Usuario</h1>
+  
+  <form action="/usuarios" method="post">
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre" required>
+
+    <label for="area">Área:</label>
+    <input type="text" id="area" name="area" required>
+
+    <label for="empresa">Empresa:</label>
+    <input type="text" id="empresa" name="empresa" required>
+    
+    <label for="empresa">Usuario:</label>
+    <input type="text" id="usuario" name="usuario" required>
+
+    <label for="empresa">Contraseña:</label>
+    <input type="text" id="password" name="password" required>
+
+    <label for="empresa">Tipo de usuario:</label>
+    <select name="tipo_usuario" id="tipo_usuario">
+      <option value="admin">Administrador</option>
+      <option value="printer">Cliente</option>
+
+    </select>
+
+    <button type="submit">Crear Usuario</button>
+  </form>
+
+  <!-- Botón para regresar al índice -->
+  <button onclick="window.location='/main';">Regresar al Inicio</button>
+</body>
+</html>

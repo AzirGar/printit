@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        table {
+          border-collapse: collapse;
+          width: 100%;
+        }
+    
+        th, td {
+          border: 1px solid #ddd;
+          padding: 8px;
+          text-align: left;
+        }
+    
+        th {
+          background-color: #f2f2f2;
+        }
+      </style>
+</head>
+<body>
+    Visualizacion de estado de impresiones
+
+
+    <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Número de Impresiones</th>
+            <th>Proyecto</th>
+            <th>Color</th>
+            <th>Observaciones</th>
+            <th>Nombre de Archivo</th>
+            <th>Estado de la impresion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% datosimpresiones.forEach((fila) => { %>
+            <tr>
+              <td><%= fila.id %></td>
+              <td><%= new Date(fila.fecha).toLocaleDateString() %></td>
+              <td><%= fila.numImpresiones %></td>
+              <td><%= fila.proyecto %></td>
+              <td><%= fila.color %></td>
+              <td><%= fila.observaciones %></td>
+              <td><%= fila.nombreArchivo %></td>
+              <td><%= fila.estado %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+
+    <button onclick="window.location='/impresion_nueva';">Impresion nueva</button>
+</body>
+</html>
