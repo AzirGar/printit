@@ -7,10 +7,9 @@ const Client = require('ssh2').Client;
 const fs = require('fs');
 const path = require('path');
 const app = express();
-const port = 3000;
+const port = 3003;
 const { exec } = require('child_process');
 const os = require('os');
-const { DownloaderHelper } = require('node-downloader-helper');
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -239,6 +238,7 @@ app.post('/impresion', verificarAutenticacion, (req, res) => {
 
         // Modificar el nombre del archivo antes de construir la ruta remota
         const rutaArchivoRemoto = path.posix.join(rutaRemota,`${user}_${archivo.name}`);
+        
 
         // Crear un stream de escritura en el servidor remoto
         const stream = sftp.createWriteStream(rutaArchivoRemoto);
@@ -303,12 +303,14 @@ app.get('/status', verificarAutenticacion,(req, res) => {
  
 });
 
+
+
+
 app.post('/imprimirdoc', (req, res) => {
   const conn = new Client();
   const { nombreArchivo } = req.body;
 
   conn.on('ready', () => {
-    // Conectar al servidor SFTP
     conn.sftp((err, sftp) => {
       if (err) {
         conn.end();
@@ -316,58 +318,47 @@ app.post('/imprimirdoc', (req, res) => {
         return res.status(500).json({ error: 'Error al establecer conexión SFTP' });
       }
 
-      // Ruta del archivo en el servidor remoto
       const remoteFilePath = path.posix.join(rutaRemota, nombreArchivo);
+      const carpetaTemporal = 'file_temp_print';
+      const localFilePath = path.join(carpetaTemporal, nombreArchivo);
 
-      // Ruta local donde se guardará el archivo descargado
-      
-      
-        // const nombreUsuario = os.userInfo().username;
-        // const rutaDocumentos = path.join('C:', 'Users', nombreUsuario, 'Documents');
-        const nombreCarpeta = 'file_temp_print';
-        const localFilePath = path.join(nombreCarpeta, nombreArchivo);
-
-  
-
-      // Descargar el archivo del servidor remoto
       sftp.fastGet(remoteFilePath, localFilePath, {}, (downloadErr) => {
         if (downloadErr) {
           console.error('Error al descargar el archivo:', downloadErr);
           return res.status(500).json({ error: 'Error al descargar el archivo del servidor' });
         } else {
           console.log('Archivo descargado exitosamente');
-          res.download(localFilePath);
-
-          // Abrir el archivo en el programa predeterminado asociado a su tipo de archivo
-          // exec(`start "" "${localFilePath}"`, (execErr) => {
-          //   if (execErr) {
-          //     console.error('Error al abrir el archivo:', execErr);
-          //     res.status(500).json({ error: 'Error al abrir el archivo descargado' });
-          //   } else {
-          //     // Puedes enviar una respuesta de éxito si es necesario
-          //     res.status(200).json({ mensaje: 'Archivo descargado y abierto exitosamente' });
-          //     fs.unlinkSync(rutaArchivoLocal);
-          //   }
-          // });
-
-          // Cerrar la conexión SFTP y SSH
+          // Seleccionar el comportamiento de acuerdo a la necesidad del cliente
+          const previewMode = req.query.preview; // Verificar si se desea la vista previa
+          if (previewMode) {
+            // Envía una respuesta con la ruta del archivo para que el cliente pueda mostrar una vista previa
+            res.status(200).json({ filePath: localFilePath });
+          } else {
+            // Descargar el archivo automáticamente
+            res.download(localFilePath, nombreArchivo, (err) => {
+              if (err) {
+                console.error('Error al enviar el archivo al cliente:', err);
+                return res.status(500).json({ error: 'Error al enviar el archivo al cliente' });
+              }
+              // Eliminar el archivo descargado en el servidor después de enviarlo al cliente
+              fs.unlinkSync(localFilePath);
+            });
+          }
           conn.end();
         }
       });
     });
   });
 
-  // Manejar errores durante la conexión SSH
+  conn.connect(sshConfig);
+
   conn.on('error', (err) => {
     console.error('Error de conexión SSH:', err);
     res.status(500).json({ error: 'Error de conexión SSH' });
   });
 
-  // Conectar al servidor SSH
-  conn.connect(sshConfig);
-
-
 });
+
 
 
 

@@ -63,6 +63,50 @@
     </tbody>
   </table>
 
+  <!-- Agrega el botón para regresar al inicio -->
   <button onclick="window.location='/main';">Regresar al Inicio</button>
+
+  <!-- Agrega aquí el código JavaScript necesario para la conexión WebSocket -->
+  <script>
+    // Establece la conexión WebSocket con el servidor
+    const socket = new WebSocket('ws://localhost:3000');
+
+    // Evento de apertura de la conexión WebSocket
+    socket.onopen = () => {
+      console.log('Conexión establecida con el servidor WebSocket');
+    };
+
+    // Evento de mensaje del servidor
+    socket.onmessage = (event) => {
+      console.log('Mensaje recibido del servidor:');
+
+      // Crear un objeto Blob y generar una URL de descarga para el archivo recibido
+      const blob = new Blob([event.data], { type: 'application/octet-stream' });
+      const url = URL.createObjectURL(blob);
+
+      // Crear un enlace y simular clic para iniciar la descarga del archivo
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'archivo_descargado.txt';
+      document.body.appendChild(a);
+      a.click();
+
+      // Limpiar recursos
+      URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    };
+
+    // Evento de error en la conexión WebSocket
+    socket.onerror = (error) => {
+      console.error('Error en la conexión WebSocket:', error);
+    };
+
+    // Agregar un evento al botón para solicitar la descarga del archivo al servidor
+    document.getElementById('descargar').addEventListener('click', () => {
+      console.log('Solicitando descarga del archivo al servidor');
+      socket.send('descargar_archivo');
+    });
+  </script>
+
 </body>
 </html>
